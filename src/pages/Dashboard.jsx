@@ -1,49 +1,49 @@
-"use client"
+"use client";
 
-import { useContext, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { Clock, BookOpen, Video, FileText, TrendingUp } from "lucide-react"
-import { LibraryContext } from "../context/LibraryContext"
-import { AuthContext } from "../context/AuthContext"
-import styles from "./Dashboard.module.css"
+import { useContext, useEffect, useState } from "react";
+import Link from "next/link"; // Importar Link de Next.js
+import { Clock, BookOpen, Video, FileText, TrendingUp } from "lucide-react";
+import { LibraryContext } from "../context/LibraryContext";
+import { AuthContext } from "../context/AuthContext";
+import styles from "./Dashboard.module.css";
 
 const Dashboard = () => {
-  const { user } = useContext(AuthContext)
-  const { getRecentContent, getPopularContent } = useContext(LibraryContext)
-  const [recentContent, setRecentContent] = useState([])
-  const [popularContent, setPopularContent] = useState([])
-  const [loading, setLoading] = useState(true)
+  const { user } = useContext(AuthContext);
+  const { getRecentContent, getPopularContent } = useContext(LibraryContext);
+  const [recentContent, setRecentContent] = useState([]);
+  const [popularContent, setPopularContent] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const recent = await getRecentContent()
-        const popular = await getPopularContent()
-        setRecentContent(recent)
-        setPopularContent(popular)
+        const recent = await getRecentContent();
+        const popular = await getPopularContent();
+        setRecentContent(recent);
+        setPopularContent(popular);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error)
+        console.error("Error fetching dashboard data:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [getRecentContent, getPopularContent])
+    fetchData();
+  }, [getRecentContent, getPopularContent]);
 
   const getIcon = (type) => {
     switch (type) {
       case "pdf":
-        return <FileText className={styles.contentIcon} />
+        return <FileText className={styles.contentIcon} />;
       case "video":
-        return <Video className={styles.contentIcon} />
+        return <Video className={styles.contentIcon} />;
       default:
-        return <BookOpen className={styles.contentIcon} />
+        return <BookOpen className={styles.contentIcon} />;
     }
-  }
+  };
 
   if (loading) {
-    return <div className={styles.loading}>Cargando...</div>
+    return <div className={styles.loading}>Cargando...</div>;
   }
 
   return (
@@ -90,13 +90,13 @@ const Dashboard = () => {
           <h2>
             <Clock size={20} /> Contenido Reciente
           </h2>
-          <Link to="/library" className={styles.viewAllLink}>
+          <Link href="/library" className={styles.viewAllLink}>
             Ver todo
           </Link>
         </div>
         <div className={styles.contentGrid}>
           {recentContent.map((item) => (
-            <Link to={`/view/${item.id}`} key={item.id} className={styles.contentCard}>
+            <Link href={`/view/${item.id}`} key={item.id} className={styles.contentCard}>
               <div className={styles.contentThumbnail}>{getIcon(item.type)}</div>
               <div className={styles.contentInfo}>
                 <h3>{item.title}</h3>
@@ -112,13 +112,13 @@ const Dashboard = () => {
           <h2>
             <TrendingUp size={20} /> Contenido Popular
           </h2>
-          <Link to="/library" className={styles.viewAllLink}>
+          <Link href="/library" className={styles.viewAllLink}>
             Ver todo
           </Link>
         </div>
         <div className={styles.contentGrid}>
           {popularContent.map((item) => (
-            <Link to={`/view/${item.id}`} key={item.id} className={styles.contentCard}>
+            <Link href={`/view/${item.id}`} key={item.id} className={styles.contentCard}>
               <div className={styles.contentThumbnail}>{getIcon(item.type)}</div>
               <div className={styles.contentInfo}>
                 <h3>{item.title}</h3>
@@ -129,8 +129,7 @@ const Dashboard = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
-
+export default Dashboard;

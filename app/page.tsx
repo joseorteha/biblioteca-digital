@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import  from ".."
+import Dashboard from "../src/pages/Dashboard";
 
-export default function SyntheticV0PageForDeployment() {
-  return < />
+export default function Home() {
+  return <Dashboard />;
 }
