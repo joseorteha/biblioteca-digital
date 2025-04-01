@@ -1,98 +1,95 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useContext } from "react"
-import { Link } from "react-router-dom"
-import { Search, Filter, BookOpen, Video, FileText, X } from "lucide-react"
-import { LibraryContext } from "../context/LibraryContext"
-import styles from "./Library.module.css"
+import { useState, useEffect, useContext } from "react";
+import Link from "next/link"; // Cambiar a next/link
+import { Search, Filter, BookOpen, Video, FileText, X } from "lucide-react";
+import { LibraryContext } from "../context/LibraryContext";
+import styles from "./Library.module.css";
 
 const Library = () => {
-  const { getAllContent } = useContext(LibraryContext)
-  const [content, setContent] = useState([])
-  const [filteredContent, setFilteredContent] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
+  const { getAllContent } = useContext(LibraryContext);
+  const [content, setContent] = useState([]);
+  const [filteredContent, setFilteredContent] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     type: "",
     subject: "",
-  })
-  const [showFilters, setShowFilters] = useState(false)
+  });
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const data = await getAllContent()
-        setContent(data)
-        setFilteredContent(data)
+        const data = await getAllContent();
+        setContent(data);
+        setFilteredContent(data);
       } catch (error) {
-        console.error("Error fetching content:", error)
+        console.error("Error fetching content:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchContent()
-  }, [getAllContent])
+    fetchContent();
+  }, [getAllContent]);
 
   useEffect(() => {
-    let result = content
+    let result = content;
 
-    // Apply search
     if (searchTerm) {
       result = result.filter(
         (item) =>
           item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
+          item.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
 
-    // Apply filters
     if (filters.type) {
-      result = result.filter((item) => item.type === filters.type)
+      result = result.filter((item) => item.type === filters.type);
     }
 
     if (filters.subject) {
-      result = result.filter((item) => item.subject === filters.subject)
+      result = result.filter((item) => item.subject === filters.subject);
     }
 
-    setFilteredContent(result)
-  }, [searchTerm, filters, content])
+    setFilteredContent(result);
+  }, [searchTerm, filters, content]);
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value)
-  }
+    setSearchTerm(e.target.value);
+  };
 
   const handleFilterChange = (name, value) => {
     setFilters((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const clearFilters = () => {
     setFilters({
       type: "",
       subject: "",
-    })
-    setSearchTerm("")
-  }
+    });
+    setSearchTerm("");
+  };
 
   const getIcon = (type) => {
     switch (type) {
       case "pdf":
-        return <FileText className={styles.contentIcon} />
+        return <FileText className={styles.contentIcon} />;
       case "video":
-        return <Video className={styles.contentIcon} />
+        return <Video className={styles.contentIcon} />;
       default:
-        return <BookOpen className={styles.contentIcon} />
+        return <BookOpen className={styles.contentIcon} />;
     }
-  }
+  };
 
-  // Get unique subjects for filter
-  const subjects = [...new Set(content.map((item) => item.subject))]
+  const subjects = [...new Set(content.map((item) => item.subject))];
 
   if (loading) {
-    return <div className={styles.loading}>Cargando...</div>
+    return <div className={styles.loading}>Cargando...</div>;
   }
 
   return (
@@ -113,7 +110,11 @@ const Library = () => {
             className={styles.searchInput}
           />
           {searchTerm && (
-            <button className={styles.clearButton} onClick={() => setSearchTerm("")} aria-label="Limpiar búsqueda">
+            <button
+              className={styles.clearButton}
+              onClick={() => setSearchTerm("")}
+              aria-label="Limpiar búsqueda"
+            >
               <X size={16} />
             </button>
           )}
@@ -191,15 +192,13 @@ const Library = () => {
       )}
 
       <div className={styles.resultsInfo}>
-        <p>
-          Mostrando {filteredContent.length} de {content.length} recursos
-        </p>
+        <p>Mostrando {filteredContent.length} de {content.length} recursos</p>
       </div>
 
       <div className={styles.contentGrid}>
         {filteredContent.length > 0 ? (
           filteredContent.map((item) => (
-            <Link to={`/view/${item.id}`} key={item.id} className={styles.contentCard}>
+            <Link href={`/view/${item.id}`} key={item.id} className={styles.contentCard}>
               <div className={styles.contentThumbnail}>{getIcon(item.type)}</div>
               <div className={styles.contentInfo}>
                 <h3>{item.title}</h3>
@@ -221,8 +220,7 @@ const Library = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Library
-
+export default Library;

@@ -1,38 +1,37 @@
-"use client"
+"use client";
 
-import { useState, useContext } from "react"
-import { useNavigate } from "react-router-dom"
-import { AuthContext } from "../context/AuthContext"
-import { BookOpen } from "lucide-react"
-import styles from "./Login.module.css"
+import { useState, useContext } from "react";
+import { useRouter } from "next/navigation"; // Usar next/navigation
+import { AuthContext } from "../context/AuthContext";
+import { BookOpen } from "lucide-react";
+import styles from "./Login.module.css";
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({ username: "", password: "" })
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const { login } = useContext(AuthContext)
-  const navigate = useNavigate()
+  const [credentials, setCredentials] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { login } = useContext(AuthContext);
+  const router = useRouter(); // Reemplazar useNavigate
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setCredentials((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setCredentials((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
-      // In a real app, this would call your API
-      await login(credentials.username, credentials.password)
-      navigate("/dashboard")
+      await login(credentials.username, credentials.password);
+      router.push("/dashboard"); // Cambiar navigate por router.push
     } catch (err) {
-      setError("Credenciales inválidas. Por favor intenta de nuevo.")
+      setError("Credenciales inválidas. Por favor intenta de nuevo.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className={styles.loginContainer}>
@@ -80,8 +79,7 @@ const Login = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
-
+export default Login;

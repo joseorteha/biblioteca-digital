@@ -1,15 +1,16 @@
-"use client"
+"use client";
 
-import { Link, useLocation } from "react-router-dom"
-import { Home, BookOpen, Search, Clock, Bookmark, Settings, X } from "lucide-react"
-import styles from "./Sidebar.module.css"
+import Link from "next/link"; // Cambiar a next/link
+import { usePathname } from "next/navigation"; // Usar usePathname en lugar de useLocation
+import { Home, BookOpen, Search, Clock, Bookmark, Settings, X } from "lucide-react";
+import styles from "./Sidebar.module.css";
 
 const Sidebar = ({ isOpen, closeSidebar }) => {
-  const location = useLocation()
+  const pathname = usePathname(); // Obtener la ruta actual
 
   const isActive = (path) => {
-    return location.pathname === path
-  }
+    return pathname === path;
+  };
 
   return (
     <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
@@ -22,7 +23,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
 
       <nav className={styles.sidebarNav}>
         <Link
-          to="/dashboard"
+          href="/dashboard"
           className={`${styles.navItem} ${isActive("/dashboard") ? styles.active : ""}`}
           onClick={closeSidebar}
         >
@@ -31,7 +32,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
         </Link>
 
         <Link
-          to="/library"
+          href="/library"
           className={`${styles.navItem} ${isActive("/library") ? styles.active : ""}`}
           onClick={closeSidebar}
         >
@@ -40,7 +41,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
         </Link>
 
         <Link
-          to="/search"
+          href="/search"
           className={`${styles.navItem} ${isActive("/search") ? styles.active : ""}`}
           onClick={closeSidebar}
         >
@@ -49,7 +50,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
         </Link>
 
         <Link
-          to="/recent"
+          href="/recent"
           className={`${styles.navItem} ${isActive("/recent") ? styles.active : ""}`}
           onClick={closeSidebar}
         >
@@ -58,7 +59,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
         </Link>
 
         <Link
-          to="/bookmarks"
+          href="/bookmarks"
           className={`${styles.navItem} ${isActive("/bookmarks") ? styles.active : ""}`}
           onClick={closeSidebar}
         >
@@ -69,7 +70,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
 
       <div className={styles.sidebarFooter}>
         <Link
-          to="/settings"
+          href="/settings"
           className={`${styles.navItem} ${isActive("/settings") ? styles.active : ""}`}
           onClick={closeSidebar}
         >
@@ -80,8 +81,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
 
       {isOpen && <div className={styles.backdrop} onClick={closeSidebar}></div>}
     </aside>
-  )
-}
+  );
+};
 
-export default Sidebar
-
+export default Sidebar;

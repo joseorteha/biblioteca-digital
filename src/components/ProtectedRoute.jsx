@@ -1,22 +1,28 @@
-"use client"
+"use client";
 
-import { useContext } from "react"
-import { Navigate } from "react-router-dom"
-import { AuthContext } from "../context/AuthContext"
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "../context/AuthContext";
 
 const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useContext(AuthContext)
+  const { user, loading } = useContext(AuthContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [user, loading, router]);
 
   if (loading) {
-    return <div>Cargando...</div>
+    return <div>Cargando...</div>;
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    return null; // El redireccionamiento ya está manejado por useEffect
   }
 
-  return children
-}
+  return children;
+};
 
-export default ProtectedRoute
-
+export default ProtectedRoute;
