@@ -1,18 +1,23 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import Link from "next/link"; // Importar Link de Next.js
+import Link from "next/link";
 import { Clock, BookOpen, Video, FileText, TrendingUp } from "lucide-react";
-import { LibraryContext } from "../context/LibraryContext";
+import { LibraryContext, ContentItem } from "../context/LibraryContext";
 import { AuthContext } from "../context/AuthContext";
 import styles from "./Dashboard.module.css";
 
 const Dashboard = () => {
+  const context = useContext(LibraryContext);
   const { user } = useContext(AuthContext);
-  const { getRecentContent, getPopularContent } = useContext(LibraryContext);
+
+  if (!context) {
+    return <div className={styles.loading}>Error: LibraryContext no está disponible</div>;
+  }
+
+  const { getRecentContent, getPopularContent, loading } = context;
   const [recentContent, setRecentContent] = useState([]);
   const [popularContent, setPopularContent] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,8 +28,6 @@ const Dashboard = () => {
         setPopularContent(popular);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -33,10 +36,12 @@ const Dashboard = () => {
 
   const getIcon = (type) => {
     switch (type) {
-      case "pdf":
+      case "document": // Cambiamos "pdf" por "document" para coincidir con el tipo ContentItem
         return <FileText className={styles.contentIcon} />;
       case "video":
         return <Video className={styles.contentIcon} />;
+      case "book":
+        return <BookOpen className={styles.contentIcon} />;
       default:
         return <BookOpen className={styles.contentIcon} />;
     }

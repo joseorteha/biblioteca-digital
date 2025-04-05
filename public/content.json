@@ -1,0 +1,30 @@
+[
+    {
+      "id": "1",
+      "title": "Biología: Ecosistemas",
+      "category": "Biología",
+      "type": "video",
+      "url": "/content/biologia-ecosistemas.mp4"
+    },
+    {
+      "id": "2",
+      "title": "Química: Tabla Periódica",
+      "category": "Química",
+      "type": "book",
+      "url": "/content/tabla-periodica.pdf"
+    },
+    {
+      "id": "3",
+      "title": "Historia de México: Revolución Mexicana",
+      "category": "Historia",
+      "type": "book",
+      "url": "/content/revolucion-mexicana.pdf"
+    },
+    {
+      "id": "4",
+      "title": "Física: Mecánica Newtoniana",
+      "category": "Física",
+      "type": "video",
+      "url": "/content/mecanica-newtoniana.mp4"
+    }
+  ]
