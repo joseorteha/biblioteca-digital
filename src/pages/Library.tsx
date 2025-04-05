@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect, useContext } from "react";
-import Link from "next/link"; // Cambiar a next/link
+import Link from "next/link";
 import { Search, Filter, BookOpen, Video, FileText, X } from "lucide-react";
-import { LibraryContext } from "../context/LibraryContext";
+import { LibraryContext, ContentItem } from "../context/LibraryContext";
 import styles from "./Library.module.css";
 
 const Library = () => {
-  const { getAllContent } = useContext(LibraryContext);
-  const [content, setContent] = useState([]);
-  const [filteredContent, setFilteredContent] = useState([]);
+  const context = useContext(LibraryContext);
+  const [content, setContent] = useState<ContentItem[]>([]);
+  const [filteredContent, setFilteredContent] = useState<ContentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
@@ -17,6 +17,12 @@ const Library = () => {
     subject: "",
   });
   const [showFilters, setShowFilters] = useState(false);
+
+  if (!context) {
+    return <div className={styles.loading}>Error: LibraryContext no está disponible</div>;
+  }
+
+  const { getAllContent } = context;
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -41,7 +47,7 @@ const Library = () => {
       result = result.filter(
         (item) =>
           item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchTerm.toLowerCase())
+          (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
@@ -56,11 +62,11 @@ const Library = () => {
     setFilteredContent(result);
   }, [searchTerm, filters, content]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleFilterChange = (name, value) => {
+  const handleFilterChange = (name: string, value: string) => {
     setFilters((prev) => ({
       ...prev,
       [name]: value,
@@ -75,12 +81,14 @@ const Library = () => {
     setSearchTerm("");
   };
 
-  const getIcon = (type) => {
+  const getIcon = (type: string) => {
     switch (type) {
-      case "pdf":
+      case "document": // Cambiamos "pdf" por "document" para coincidir con ContentItem
         return <FileText className={styles.contentIcon} />;
       case "video":
         return <Video className={styles.contentIcon} />;
+      case "book":
+        return <BookOpen className={styles.contentIcon} />;
       default:
         return <BookOpen className={styles.contentIcon} />;
     }
@@ -141,11 +149,11 @@ const Library = () => {
                 Todos
               </button>
               <button
-                className={`${styles.filterOption} ${filters.type === "pdf" ? styles.active : ""}`}
-                onClick={() => handleFilterChange("type", "pdf")}
+                className={`${styles.filterOption} ${filters.type === "document" ? styles.active : ""}`}
+                onClick={() => handleFilterChange("type", "document")} // Cambiamos "pdf" por "document"
               >
                 <FileText size={16} />
-                PDFs
+                Documentos
               </button>
               <button
                 className={`${styles.filterOption} ${filters.type === "video" ? styles.active : ""}`}

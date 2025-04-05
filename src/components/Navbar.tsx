@@ -28,7 +28,7 @@ const Navbar = ({ toggleSidebar }: NavbarProps) => {
         </button>
         <Link href="/dashboard" className={styles.logo}>
           <BookOpen size={24} />
-          <span>Biblioteca Digital</span>
+          <span>Biblioteca Xochitla</span>
         </Link>
       </div>
       <div className={styles.navbarRight}>
